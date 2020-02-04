@@ -7,6 +7,14 @@ server.use(express.json());
 
 const projects = [];
 
+let counter = 0;
+
+server.use((req, res, next) => {
+    counter += 1;
+    console.log(`Requisitions: ${counter}`);
+
+    return next();
+});
 
 function checkID(req, res, next) {
     const { id } = req.params;
@@ -17,7 +25,7 @@ function checkID(req, res, next) {
         return res.send("Bad request;\nID does not exists");
     };
 
-    return next();
+    return next(index);
 };
 
 
@@ -50,7 +58,7 @@ server.delete('/projects/:id', checkID, (req, res) => {
     return res.json(projects);
 });
 
-server.put('/projects/:id', (req, res) => {
+server.put('/projects/:id', checkID, (req, res) => {
     const { id } = req.params;
     const { title } = req.body;
 
@@ -61,7 +69,7 @@ server.put('/projects/:id', (req, res) => {
     return res.json(projects);
 });
 
-server.post('/projects/:id/tasks', (req, res) => {
+server.post('/projects/:id/tasks', checkID, (req, res) => {
     const { id } = req.params;
     const { tasks } = req.body;
 
