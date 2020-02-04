@@ -25,7 +25,7 @@ function checkID(req, res, next) {
         return res.send("Bad request;\nID does not exists");
     };
 
-    return next(index);
+    return next();
 };
 
 
